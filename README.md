@@ -42,3 +42,33 @@ Open your browser and go to http://localhost:3000
  - Response: { "message": "Entry removed" }
 - GET /dump: Dumps the entire keychain.
   - Response: { "repr": < keychain-data > }
+
+
+### Key Processes
+1.	Initializing the Keychain: Creates a new keychain with a password that will be used to derive a cryptographic key for encryption.
+    - Process:
+    A random salt is generated.
+    The password is used along with the salt to derive an encryption key using the PBKDF2 algorithm.
+    An empty keychain is created and stored in memory.
+    The keychain data (including the salt) is saved to a file (keychain.json).
+2.	Loading an Existing Keychain: Loads an existing keychain from a file using a password.
+    - Process:
+    The keychain data is read from the file.
+    The password and salt are used to derive the decryption key.
+    The encrypted keychain data is decrypted using the derived key.
+    The keychain is restored in memory.
+3.	Setting an Entry in the Keychain: Stores a new password or secret in the keychain.
+	- Process:
+    The value (e.g., password) is encrypted using the key derived from the user's password.
+    The encrypted value is stored in the keychain with the provided name as the key.
+4.	Getting an Entry from the Keychain: Retrieve a stored password or secret from the keychain.
+	- Process:
+    The encrypted value is fetched from the keychain using the provided name.
+    The value is decrypted using the derived key.
+    The decrypted value is returned to the user.
+5.	Removing an Entry from the Keychain: Delete a stored password or secret from the keychain.
+	- Process: The entry is removed from the keychain data structure.
+6.	Dumping the Keychain: Export the entire keychain data in an encrypted form.
+	- Process:
+	The keychain data is encrypted using the derived key.
+	The encrypted data, along with the salt, is returned or saved to a file.
